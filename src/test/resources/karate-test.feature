@@ -22,7 +22,16 @@ Feature: Obtener todos los personajes
     * print numeroClon
     * def nombreClon = 'SuperHeroe Clon ' + numeroClon
     * print nombreClon
-    * def requestBody = { name: nombreClon, alterego: 'Peter Parker', description: 'Superhéroe arácnido de Marvel', powers: ['Agilidad', 'Sentido arácnido', 'Trepar muros'] }
+    * def requestBody =
+"""
+{
+  "name": "",
+  "alterego": "Peter Parker",
+  "description": "Superhéroe arácnido de Marvel",
+  "powers": ["Agilidad", "Sentido arácnido", "Trepar muros"]
+}
+"""
+    * set requestBody.name = nombreClon
     Given url 'http://bp-se-test-cabcd9b246a5.herokuapp.com/roasanch/api/characters'
     And request requestBody
     And header Content-Type = 'application/json'
