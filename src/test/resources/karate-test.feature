@@ -31,6 +31,8 @@ Feature: Obtener todos los personajes
     * def expected = { id: '#number', name: '#string', alterego: '#string', description: '#string', powers: ['Agilidad', 'Sentido arácnido', 'Trepar muros'] }
     And match response contains expected
     * print response
+    * def idCreado = response.id
+    * print 'ID creado:', idCreado
 
 
   Scenario: T-API-CTNREM-000-CA4-Crear personaje con nombre duplicado (error 400)
@@ -73,7 +75,11 @@ Feature: Obtener todos los personajes
     Then status 404
 
   Scenario: T-API-CTNREM-000-CA9-Eliminar personaje válido
-    Given url 'http://bp-se-test-cabcd9b246a5.herokuapp.com/testuser/api/characters/6'
+    * def result = callonce read('classpath:karate-test.feature@T-API-CTNREM-000-CA3-Crear un personaje válido')
+    * def idCreado = result.idCreado
+    * print 'ID para eliminar:', idCreado
+
+    Given url 'http://bp-se-test-cabcd9b246a5.herokuapp.com/roasanch/api/characters/' + idCreado
     When method DELETE
     Then status 200
 
