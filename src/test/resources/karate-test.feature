@@ -86,9 +86,10 @@ Feature: Obtener todos los personajes
   Scenario: T-API-CTNREM-000-CA9-Eliminar personaje válido
     * def result = callonce read('classpath:karate-test.feature@T-API-CTNREM-000-CA3-Crear un personaje válido')
     * def idCreado = result.idCreado
-    * print 'ID para eliminar:', idCreado
+    * def urlEliminar = 'http://bp-se-test-cabcd9b246a5.herokuapp.com/roasanch/api/characters/' + idCreado
+    * print 'URL para eliminar:', urlEliminar
 
-    Given url 'http://bp-se-test-cabcd9b246a5.herokuapp.com/roasanch/api/characters/' + idCreado
+    Given url urlEliminar
     When method DELETE
     Then status 200
 
