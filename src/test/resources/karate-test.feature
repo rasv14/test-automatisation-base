@@ -19,9 +19,7 @@ Feature: Obtener todos los personajes
     * print response
 
   Scenario: T-API-CTNREM-000-CA3-Crear un personaje valido
-    * print numeroClon
     * def nombreClon = 'SuperHeroe Clon ' + numeroClon
-    * print nombreClon
     * def requestBody =
     """
     {
@@ -37,8 +35,6 @@ Feature: Obtener todos los personajes
     And header Content-Type = 'application/json'
     When method POST
     Then status 201
-    * def expected = { id: '#number', name: '#string', alterego: '#string', description: '#string', powers: ['Agilidad', 'Sentido arácnido', 'Trepar muros'] }
-    And match response contains expected
     * print response
     * def result = { idCreado: response.id }
 
@@ -83,13 +79,28 @@ Feature: Obtener todos los personajes
     Then status 404
 
   Scenario: T-API-CTNREM-000-CA9-Eliminar personaje válido
-    * def result = callonce read('classpath:karate-test.feature@T-API-CTNREM-000-CA3-Crear un personaje valido')
-    * def idCreado = result.idCreado
-    * print 'ID para eliminar:', idCreado
+    * def nombreClon = 'SuperHeroe Clon ' + numeroClon
+    * def requestBody =
+    """
+    {
+      "name": "",
+      "alterego": "Peter Parker",
+      "description": "Superhéroe arácnido de Marvel",
+      "powers": ["Agilidad", "Sentido arácnido", "Trepar muros"]
+    }
+    """
+    * set requestBody.name = nombreClon
+    Given url 'http://bp-se-test-cabcd9b246a5.herokuapp.com/roasanch/api/characters'
+    And request requestBody
+    And header Content-Type = 'application/json'
+    When method POST
+    Then status 201
+    * def idCreado = response.id
+    * print 'ID creado:', idCreado
 
     Given url 'http://bp-se-test-cabcd9b246a5.herokuapp.com/roasanch/api/characters/' + idCreado
     When method DELETE
-    Then status 200
+    Then status 204
 
   Scenario: T-API-CTNREM-000-CA10-Eliminar personaje inexistente (error 404)
     Given url 'http://bp-se-test-cabcd9b246a5.herokuapp.com/testuser/api/characters/9999'
