@@ -18,19 +18,19 @@ Feature: Obtener todos los personajes
     And match response contains { id: 1, name: '#string', alterego: '#string', description: '#string' }
     * print response
 
-  Scenario: T-API-CTNREM-000-CA3-Crear un personaje válido
+  Scenario: T-API-CTNREM-000-CA3-Crear un personaje valido
     * print numeroClon
     * def nombreClon = 'SuperHeroe Clon ' + numeroClon
     * print nombreClon
     * def requestBody =
-"""
-{
-  "name": "",
-  "alterego": "Peter Parker",
-  "description": "Superhéroe arácnido de Marvel",
-  "powers": ["Agilidad", "Sentido arácnido", "Trepar muros"]
-}
-"""
+    """
+    {
+      "name": "",
+      "alterego": "Peter Parker",
+      "description": "Superhéroe arácnido de Marvel",
+      "powers": ["Agilidad", "Sentido arácnido", "Trepar muros"]
+    }
+    """
     * set requestBody.name = nombreClon
     Given url 'http://bp-se-test-cabcd9b246a5.herokuapp.com/roasanch/api/characters'
     And request requestBody
@@ -40,8 +40,7 @@ Feature: Obtener todos los personajes
     * def expected = { id: '#number', name: '#string', alterego: '#string', description: '#string', powers: ['Agilidad', 'Sentido arácnido', 'Trepar muros'] }
     And match response contains expected
     * print response
-    * def idCreado = response.id
-    * print 'ID creado:', idCreado
+    * def result = { idCreado: response.id }
 
 
   Scenario: T-API-CTNREM-000-CA4-Crear personaje con nombre duplicado (error 400)
@@ -84,12 +83,11 @@ Feature: Obtener todos los personajes
     Then status 404
 
   Scenario: T-API-CTNREM-000-CA9-Eliminar personaje válido
-    * def result = callonce read('classpath:karate-test.feature@T-API-CTNREM-000-CA3-Crear un personaje válido')
+    * def result = callonce read('classpath:karate-test.feature@T-API-CTNREM-000-CA3-Crear un personaje valido')
     * def idCreado = result.idCreado
-    * def urlEliminar = 'http://bp-se-test-cabcd9b246a5.herokuapp.com/roasanch/api/characters/' + idCreado
-    * print 'URL para eliminar:', urlEliminar
+    * print 'ID para eliminar:', idCreado
 
-    Given url urlEliminar
+    Given url 'http://bp-se-test-cabcd9b246a5.herokuapp.com/roasanch/api/characters/' + idCreado
     When method DELETE
     Then status 200
 
